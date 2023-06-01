@@ -1,0 +1,21 @@
+Navn: Daniel Alexander Dam
+Studie email: dani36i9@stud.kea.dk
+
+Github link:
+https://github.com/GuyKawaii/third-semester-exam-backend
+https://github.com/GuyKawaii/third-semester-exam-frontend
+
+Heroku link:
+jeg nåede at lave alle opgaver når det kommer til funktionalitet.
+
+Opgave 1:
+Der er en side til alle crud operationer
+
+Opgaver 2:
+Der er 2 sider til alle crud operationer
+
+Opgave 3:
+jeg valgte a: tjek i backend initData method createSeason() for at se hvordan jeg har lavet det.
+
+Opgave 4:
+jeg valgte c: der er en side til at vise lidt forskelligt information om en sæson.
