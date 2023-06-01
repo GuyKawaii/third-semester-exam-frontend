@@ -1,5 +1,5 @@
 // Add event listener to Create form
-document.getElementById('create-form').addEventListener('submit', function(event) {
+document.getElementById('create-form').addEventListener('submit', function (event) {
     event.preventDefault();
 
     var formData = {
@@ -19,7 +19,6 @@ document.getElementById('create-form').addEventListener('submit', function(event
         }
     });
 });
-
 
 function refreshList() {
     fetch('http://localhost:8080/api/races')
@@ -59,17 +58,13 @@ function refreshList() {
         .catch(error => console.error('Error:', error));
 }
 
-
 refreshList();
 
-
-
 // Close button functionality
-document.getElementById("close").onclick = function() {
+document.getElementById("close").onclick = function () {
     var updateModal = document.getElementById("updateModal");
     updateModal.style.display = "none";
 }
-
 
 // Update a Race Result
 function updateRaceResult(id) {
@@ -89,7 +84,7 @@ function updateRaceResult(id) {
 }
 
 // Submit form for update
-document.getElementById("updateForm").addEventListener("submit", function(event){
+document.getElementById("updateForm").addEventListener("submit", function (event) {
     event.preventDefault();
 
     console.log("update form submitted");
@@ -123,7 +118,6 @@ document.getElementById("updateForm").addEventListener("submit", function(event)
     });
 });
 
-
 // Delete a Race Result
 function deleteRaceResult(id) {
     fetch(`http://localhost:8080/api/race-results/${id}`, {
@@ -135,6 +129,6 @@ function deleteRaceResult(id) {
     });
 }
 
-window.onload = function() {
+window.onload = function () {
     refreshList();
 }
