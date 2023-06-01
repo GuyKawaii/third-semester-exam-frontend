@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Races</title>
+  <link rel="stylesheet" href="../../css/main.css">
+  <script src="../../js/legacy/racesOld.js" defer></script>
+</head>
+<body class="center">
+<h1>Races</h1>
+<div id="raceForm">
+  <form onsubmit="addRace(event)">
+    <input id="dateInput" type="date" required>
+    <input id="boatTypeInput" type="text" required>
+    <button type="submit">Add Race</button>
+  </form>
+</div>
+
+<ul id="racesList">
+  <!-- Races will be populated here by JavaScript -->
+</ul>
+
+</body>
+</html>

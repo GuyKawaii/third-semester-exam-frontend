@@ -29,18 +29,18 @@ async function addRaceResult(event) {
     }
 }
 
-function populateRaceResultsList() {
-    const raceResultsList = document.getElementById('raceResultsList');
-    raceResultsList.innerHTML = '';
-
-    fetchRaceResults(raceId).then(results => {
-        results.forEach(result => {
-            const li = document.createElement('li');
-            li.textContent = `Sailboat: ${result.sailboat.name}, Points: ${result.points}`;
-            raceResultsList.appendChild(li);
-        });
-    });
-}
+// function populateRaceResultsList() {
+//     const raceResultsList = document.getElementById('raceResultsList');
+//     raceResultsList.innerHTML = '';
+//
+//     fetchRaceResults(raceId).then(results => {
+//         results.forEach(result => {
+//             const li = document.createElement('li');
+//             li.textContent = `Sailboat: ${result.sailboat.name}, Points: ${result.points}`;
+//             raceResultsList.appendChild(li);
+//         });
+//     });
+// }
 
 // Add event listener to Create form
 document.getElementById('create-form').addEventListener('submit', function (event) {
@@ -219,6 +219,5 @@ function populateSailboatsSelect() {
 }
 
 
-populateRaceResultsList();
 populateSailboatsSelect();
 refreshList();

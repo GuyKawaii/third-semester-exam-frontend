@@ -2,33 +2,24 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Race Results</title>
+  <title>Race</title>
   <link rel="stylesheet" href="../css/main.css">
   <script src="../js/race.js" defer></script>
 </head>
 <body class="center">
-<h1>Race Results</h1>
+<div class="navbar">
+  <div><a href="races.html">Races</a></div>
+  <div><a href="sailboats.html">Boats</a></div>
+  <div><a href="season-results.html">Season Results</a></div>
+</div>
+
+<h1>add participation</h1>
 
 <form id="create-form">
   <select id="create-sailboat"> </select>
   <input type="number" id="create-points" placeholder="points"> </input>
-  <button type="submit">Create</button>
+  <button type="submit">Add</button>
 </form>
-
-
-<div id="raceResultForm">
-  <form onsubmit="addRaceResult(event)">
-    <select id="sailboatSelect" required>
-      <!-- Sailboat options will be populated by JavaScript -->
-    </select>
-    <input id="pointsInput" type="number" required>
-    <button type="submit">Add Race Result</button>
-  </form>
-</div>
-
-<ul id="raceResultsList">
-  <!-- Race results will be populated here by JavaScript -->
-</ul>
 
 <h1>race-results</h1>
 <table id="race-results-list">

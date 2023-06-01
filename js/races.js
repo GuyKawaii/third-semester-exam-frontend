@@ -1,43 +1,164 @@
-async function fetchRaces() {
-    const response = await fetch('http://localhost:8080/api/races');
-    return await response.json();
-}
-
-async function addRace(event) {
+// Add event listener to Create form
+document.getElementById('create-form').addEventListener('submit', function(event) {
     event.preventDefault();
 
-    const date = document.getElementById('dateInput').value;
-    const boatType = document.getElementById('boatTypeInput').value;
+    var formData = {
+        date: document.getElementById('create-date').value,
+        boatType: document.getElementById('create-boatType').value
+    };
 
-    const response = await fetch('http://localhost:8080/api/races', {
+    fetch('http://localhost:8080/api/races', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ date, boatType })
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
+    }).then(response => {
+        if (response.ok) {
+            refreshList();
+        }
     });
+});
 
-    if (response.ok) {
-        // Refresh the races list after adding a new race
-        populateRacesList();
-    }
+
+function refreshList() {
+    fetch('http://localhost:8080/api/races')
+        .then(response => response.json())
+        .then(data => {
+            const table = document.getElementById('raceList');
+            const tbody = table.querySelector('tbody');
+
+            // Clear the table body content in case it's being refreshed
+            tbody.innerHTML = '';
+
+            data.forEach(item => {
+                let row = document.createElement('tr');
+
+                // Date
+                let dateCell = document.createElement('td');
+                dateCell.textContent = item.date;
+                row.appendChild(dateCell);
+
+                // Boat Type
+                let boatTypeCell = document.createElement('td');
+                boatTypeCell.textContent = item.boatType;
+                row.appendChild(boatTypeCell);
+
+                // Action buttons
+                let actionCell = document.createElement('td');
+                let selectBtn = document.createElement('button');
+                selectBtn.textContent = 'Select';
+                selectBtn.addEventListener('click', () => window.location.href = `race.html?raceId=${item.id}`);
+                actionCell.appendChild(selectBtn);
+
+                row.appendChild(actionCell);
+
+                tbody.appendChild(row);
+            });
+        })
+        .catch(error => console.error('Error:', error));
 }
 
-function populateRacesList() {
-    const racesList = document.getElementById('racesList');
-    racesList.innerHTML = '';
 
-    fetchRaces().then(races => {
-        races.forEach(race => {
-            const li = document.createElement('li');
-            li.textContent = `Date: ${race.date}, Boat Type: ${race.boatType}`;
-            const btn = document.createElement('button');
-            btn.textContent = "Select";
-            btn.onclick = function () {
-                window.location.href = `race.html?raceId=${race.id}`;
-            };
-            li.appendChild(btn);
-            racesList.appendChild(li);
+refreshList();
+
+
+
+// Close button functionality
+document.getElementById("close").onclick = function() {
+    var updateModal = document.getElementById("updateModal");
+    updateModal.style.display = "none";
+}
+
+
+// Update a Race Result
+function updateRaceResult(id) {
+    var updateModal = document.getElementById("updateModal");
+    document.getElementById("updateId").value = id;
+
+    // Fetch current details of Race Result and fill in form
+    fetch(`http://localhost:8080/api/race-results/${id}`)
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById("sailboatId").value = data.sailboat.id;
+            document.getElementById("raceId").value = data.race.id;
+            document.getElementById("points").value = data.points;
         });
+
+    updateModal.style.display = "block";
+}
+
+// Submit form for update
+document.getElementById("updateForm").addEventListener("submit", function(event){
+    event.preventDefault();
+
+    console.log("update form submitted");
+
+    var formData = {
+        sailboat: {
+            id: document.getElementById("sailboatId").value,
+        },
+        race: {
+            id: document.getElementById("raceId").value,
+        },
+        points: document.getElementById("points").value,
+    };
+
+    var id = document.getElementById("updateId").value;
+
+    console.log(JSON.stringify(formData));
+
+    fetch(`http://localhost:8080/api/race-results/${id}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
+    }).then(response => {
+        if (response.ok) {
+            refreshList();
+            var updateModal = document.getElementById("updateModal");
+            updateModal.style.display = "none";
+        }
+    });
+});
+
+
+// Delete a Race Result
+function deleteRaceResult(id) {
+    fetch(`http://localhost:8080/api/race-results/${id}`, {
+        method: 'DELETE'
+    }).then(response => {
+        if (response.ok) {
+            refreshList();
+        }
     });
 }
 
-populateRacesList();
+// // Populate Race Select
+// function populateRaces(selectId, defaultSelection) {
+//     fetch('http://localhost:8080/api/races')
+//         .then(response => response.json())
+//         .then(data => {
+//             let select = document.getElementById(selectId);
+//             data.forEach(item => {
+//                 let option = document.createElement('option');
+//                 option.value = item.id;
+//                 option.textContent = `${item.date} - ${item.boatType}`;
+//                 if(item.id === defaultSelection){
+//                     option.selected = true;
+//                 }
+//                 select.appendChild(option);
+//             });
+//         })
+//         .catch(error => console.error('Error:', error));
+// }
+
+// todo add update select options to html instead of input fieldss
+window.onload = function() {
+    refreshList();
+    // populateSailboats('create-sailboat', 2);
+    // populateSailboats('update-sailboat', 2);
+    // populateRaces('create-race', 2);
+    // populateRaces('update-race', 2);
+}

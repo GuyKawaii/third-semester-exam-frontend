@@ -1,24 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Races</title>
-  <link rel="stylesheet" href="../css/main.css">
-  <script src="../js/races.js" defer></script>
+    <title>Races</title>
+    <link rel="stylesheet" href="../css/main.css">
+    <script src="../js/races.js" defer></script>
 </head>
-<body>
-<h1>Races</h1>
-<div id="raceForm">
-  <form onsubmit="addRace(event)">
-    <input id="dateInput" type="date" required>
-    <input id="boatTypeInput" type="text" required>
-    <button type="submit">Add Race</button>
-  </form>
+<body class="center">
+<div class="navbar">
+    <div><a href="races.html">Races</a></div>
+    <div><a href="sailboats.html">Boats</a></div>
+    <div><a href="season-results.html">Season Results</a></div>
 </div>
 
-<ul id="racesList">
-  <!-- Races will be populated here by JavaScript -->
-</ul>
+<h2>Create race</h2>
+<form id="create-form">
+    <input id="create-date" type="date" required>
+    <select id="create-boatType">
+        <option value="LONGER_THAN_40_FEET">LONGER_THAN_40_FEET</option>
+        <option value="LESS_THAN_25_FEET">LESS_THAN_25_FEET</option>
+        <option value="BETWEEN_25_AND_40_FEET">BETWEEN_25_AND_40_FEET</option>
+    </select>
+    <button type="submit">Create</button>
+</form>
+
+<h1>All Races</h1>
+<table id="raceList">
+    <thead>
+    <tr>
+        <th>Date</th>
+        <th>Boat Type</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+
+<div id="updateModal">
+    <form id="updateForm">
+        <span id="close">&times;</span>
+        <label for="sailboatId">sailboatId:</label><br>
+        <input type="number" id="sailboatId" name="sailboatId"><br>
+        <label for="raceId">raceId:</label><br>
+        <input type="number" id="raceId" name="raceId"><br>
+        <label for="points">points:</label><br>
+        <input type="number" id="points" name="points"><br>
+        <input type="hidden" id="updateId">
+        <input type="submit" value="Update">
+    </form>
+</div>
 
 </body>
 </html>

@@ -1,16 +1,9 @@
 /*todo make the div table better looking*/
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f0f0f0;
-    margin: 0;
-    padding: 0;
-}
 
 body.center {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
     height: 100vh;
 }
 
@@ -87,10 +80,40 @@ h3 {
 
 div {
     background-color: #ffffff;
-    /*padding: 20px;*/
-    /*margin: 10px 0;*/
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     width: 80%;
-    /*max-width: 800px;*/
 }
 
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.navbar {
+    display: flex;
+    background-color: #f1f1f1;
+    padding: 0;
+    margin: 0;
+}
+
+.navbar > div {
+    margin-right: 16px;
+}
+
+.navbar a {
+    display: block;
+    padding: 8px 16px;
+    text-decoration: none;
+    color: #000000;
+}
+
+.navbar a:hover {
+    background-color: #555555;
+    color: #ffffff;
+}
