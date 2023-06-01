@@ -1,97 +1,94 @@
-// Fetch all Sailboats when the page loads
-window.onload = function() {
+document.addEventListener('DOMContentLoaded', (event) => {
     refreshList();
-};
+    setupEventListeners();
+});
 
-// Add event listener to Create form
-document.getElementById('create-form').addEventListener('submit', function(event) {
-    event.preventDefault();// Add event listener to Create form
-document.getElementById('create-form').addEventListener('submit', function(event) {
+function setupEventListeners() {
+    document.getElementById('create-form').addEventListener('submit', createBoat);
+    document.getElementById('close').onclick = closeModal;
+    document.getElementById("updateForm").addEventListener("submit", updateBoatForm);
+}
+
+function createBoat(event) {
     event.preventDefault();
 
-    var formData = {
+    const formData = {
         name: document.getElementById('create-name').value,
         boatType: document.getElementById('create-boatType').value,
     };
 
-    fetch('http://localhost:8080/api/sailboats', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(formData)
-    }).then(response => {
-        if (response.ok) {
-            refreshList();
-        }
-    });
-});
+    sendData('http://localhost:8080/api/sailboats', 'POST', formData);
+}
 
-    var formData = {
-        name: document.getElementById('create-name').value,
-        boatType: document.getElementById('create-boatType').value,
+function closeModal() {
+    const updateModal = document.getElementById("updateModal");
+    updateModal.style.display = "none";
+}
+
+function updateBoatForm(event) {
+    event.preventDefault();
+
+    const formData = {
+        name: document.getElementById("name").value,
+        boatType: document.getElementById("boatType").value,
     };
 
-    fetch('http://localhost:8080/api/sailboats', {
-        method: 'POST',
+    const id = document.getElementById("updateId").value;
+
+    sendData(`http://localhost:8080/api/sailboats/${id}`, 'PUT', formData);
+}
+
+function sendData(url, method, data) {
+    fetch(url, {
+        method: method,
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify(formData)
+        body: JSON.stringify(data)
     }).then(response => {
         if (response.ok) {
             refreshList();
+            if(method == 'PUT') {
+                closeModal();
+            }
         }
     });
-});
+}
 
-// Refresh list of Sailboats
 function refreshList() {
     fetch('http://localhost:8080/api/sailboats')
         .then(response => response.json())
         .then(data => {
-            var table = document.getElementById('sailboats-list');
-            // Clear the table
+            const table = document.getElementById('sailboats-list');
+
             while (table.rows.length > 1) {
                 table.deleteRow(1);
             }
-            // Repopulate the table
+
             data.forEach(boat => {
-                var row = table.insertRow(-1);
+                const row = table.insertRow(-1);
                 row.insertCell(0).textContent = boat.id;
                 row.insertCell(1).textContent = boat.name;
                 row.insertCell(2).textContent = boat.boatType;
 
-                // Create "Update" button
-                var updateButton = document.createElement('button');
+                const updateButton = document.createElement('button');
                 updateButton.textContent = "Update";
-                updateButton.addEventListener('click', function() {
-                    updateBoat(boat.id);
-                });
+                updateButton.addEventListener('click', () => updateBoat(boat.id));
 
-                // Create "Delete" button
-                var deleteButton = document.createElement('button');
+                const deleteButton = document.createElement('button');
                 deleteButton.textContent = "Delete";
-                deleteButton.addEventListener('click', function() {
-                    deleteBoat(boat.id);
-                });
+                deleteButton.addEventListener('click', () => deleteBoat(boat.id));
 
-                // Add buttons to new cell
-                var actionsCell = row.insertCell(3);
+                const actionsCell = row.insertCell(3);
                 actionsCell.appendChild(updateButton);
                 actionsCell.appendChild(deleteButton);
             });
         });
 }
 
-// Update a Sailboat
 function updateBoat(id) {
-    var updateModal = document.getElementById("updateModal");
     document.getElementById("updateId").value = id;
 
-    console.log("to update: " + id);
-
-    // Fetch current details of Sailboat and fill in form
     fetch(`http://localhost:8080/api/sailboats/${id}`)
         .then(response => response.json())
         .then(data => {
@@ -99,46 +96,9 @@ function updateBoat(id) {
             document.getElementById("boatType").value = data.boatType;
         });
 
-    updateModal.style.display = "block";
+    document.getElementById("updateModal").style.display = "block";
 }
 
-// Close button functionality
-document.getElementById("close").onclick = function() {
-    var updateModal = document.getElementById("updateModal");
-    updateModal.style.display = "none";
-}
-
-// Submit form for update
-document.getElementById("updateForm").addEventListener("submit", function(event){
-    event.preventDefault();
-
-    console.log("update form submitted");
-
-    var formData = {
-        name: document.getElementById("name").value,
-        boatType: document.getElementById("boatType").value,
-    };
-
-    var id = document.getElementById("updateId").value;
-
-    console.log(JSON.stringify(formData));
-
-    fetch(`http://localhost:8080/api/sailboats/${id}`, {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(formData)
-    }).then(response => {
-        if (response.ok) {
-            refreshList();
-            var updateModal = document.getElementById("updateModal");
-            updateModal.style.display = "none";
-        }
-    });
-});
-
-// Delete a Sailboat
 function deleteBoat(id) {
     fetch(`http://localhost:8080/api/sailboats/${id}`, {
         method: 'DELETE'
@@ -146,11 +106,9 @@ function deleteBoat(id) {
         if (response.ok) {
             refreshList();
         } else {
-            throw new Error('Cant delete sailboat as it has been in a race.');
+            alert('Cant delete sailboat as it has been in a race.');
         }
     }).catch(error => {
-        // Display error message in a popup
         alert(error.message);
     });
 }
-
