@@ -166,7 +166,7 @@ function populateRaces(selectId, defaultSelection) {
             data.forEach(item => {
                 let option = document.createElement('option');
                 option.value = item.id;
-                option.textContent = `date:${item.date} - type:${item.boatType}`;
+                option.textContent = `${item.date} - ${item.boatType}`;
                 if(item.id === defaultSelection){
                     option.selected = true;
                 }
