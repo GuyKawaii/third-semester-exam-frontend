@@ -67,7 +67,9 @@ function refreshList() {
 // Update a Sailboat
 function updateBoat(id) {
     var updateModal = document.getElementById("updateModal");
-    document.getElementById("updateId").value = id;
+    document.getElementById("updateId").value = id; // TODO checkout later location HTML and so on
+
+    console.log("to update: " + id);
 
     // Fetch current details of Sailboat and fill in form
     fetch(`http://localhost:8080/api/sailboats/${id}`)
@@ -90,12 +92,16 @@ document.getElementById("close").onclick = function() {
 document.getElementById("updateForm").addEventListener("submit", function(event){
     event.preventDefault();
 
+    console.log("update form submitted");
+
     var formData = {
         name: document.getElementById("name").value,
         boatType: document.getElementById("boatType").value,
     };
 
     var id = document.getElementById("updateId").value;
+
+    console.log(JSON.stringify(formData));
 
     fetch(`http://localhost:8080/api/sailboats/${id}`, {
         method: 'PUT',
