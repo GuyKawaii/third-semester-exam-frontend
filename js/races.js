@@ -2,7 +2,7 @@
 document.getElementById('create-form').addEventListener('submit', function (event) {
     event.preventDefault();
 
-    var formData = {
+    let formData = {
         date: document.getElementById('create-date').value,
         boatType: document.getElementById('create-boatType').value
     };
@@ -62,13 +62,13 @@ refreshList();
 
 // Close button functionality
 document.getElementById("close").onclick = function () {
-    var updateModal = document.getElementById("updateModal");
+    let updateModal = document.getElementById("updateModal");
     updateModal.style.display = "none";
 }
 
 // Update a Race Result
 function updateRaceResult(id) {
-    var updateModal = document.getElementById("updateModal");
+    let updateModal = document.getElementById("updateModal");
     document.getElementById("updateId").value = id;
 
     // Fetch current details of Race Result and fill in form
@@ -89,7 +89,7 @@ document.getElementById("updateForm").addEventListener("submit", function (event
 
     console.log("update form submitted");
 
-    var formData = {
+    let formData = {
         sailboat: {
             id: document.getElementById("sailboatId").value,
         },
@@ -99,7 +99,7 @@ document.getElementById("updateForm").addEventListener("submit", function (event
         points: document.getElementById("points").value,
     };
 
-    var id = document.getElementById("updateId").value;
+    let id = document.getElementById("updateId").value;
 
     console.log(JSON.stringify(formData));
 
@@ -112,7 +112,7 @@ document.getElementById("updateForm").addEventListener("submit", function (event
     }).then(response => {
         if (response.ok) {
             refreshList();
-            var updateModal = document.getElementById("updateModal");
+            let updateModal = document.getElementById("updateModal");
             updateModal.style.display = "none";
         }
     });

@@ -1,13 +1,10 @@
-async function fetchRacesDTO() {
-    const response = await fetch('http://localhost:8080/api/races/races-dto');
+// fetch data
+async function fetchData(url) {
+    const response = await fetch(url);
     return await response.json();
 }
 
-async function fetchSailboatCumulativeResultsDTO() {
-    const response = await fetch('http://localhost:8080/api/races/sailboats-cumulative-results-dto');
-    return await response.json();
-}
-
+// data manipulation
 function createTableRow(columns) {
     const row = document.createElement('tr');
     columns.forEach(column => {
@@ -18,57 +15,10 @@ function createTableRow(columns) {
     return row;
 }
 
-function sortByDate(a, b) {
-    return new Date(a.date) - new Date(b.date);
-}
-
-function sortByPoints(a, b) {
-    return a.points - b.points;
-}
-
 function createParticipantItem(result) {
     const participant = document.createElement('li');
     participant.textContent = `${result.sailboat.name}: ${result.points} points`;
     return participant;
-}
-
-async function populateRaceResultsList(raceDTOs, raceResultsList) {
-    raceDTOs.sort(sortByDate);
-
-    raceDTOs.forEach(raceDTO => {
-        // Sort raceResults by points
-        raceDTO.raceResults.sort(sortByPoints);
-
-        // Create a div for this race
-        const raceDiv = document.createElement('div');
-        raceDiv.innerHTML = `<h3>Race Date: ${raceDTO.date}, Boat Type: ${raceDTO.boatType}</h3>`;
-
-        // Create a ul for the participant list
-        const participantsList = document.createElement('ul');
-        raceDTO.raceResults.forEach(result => {
-            const participant = createParticipantItem(result);
-            participantsList.appendChild(participant);
-        });
-
-        raceDiv.appendChild(participantsList);
-        raceResultsList.appendChild(raceDiv);
-    });
-}
-
-function populateCumulativeResultsTable(sailboatDTOs, cumulativeResultsTable) {
-    sailboatDTOs.forEach(dto => {
-        cumulativeResultsTable.appendChild(createTableRow([dto.name, dto.boatType, dto.totalRaces, dto.totalPoints]));
-    });
-}
-
-async function fetchSailboatCount() {
-    const response = await fetch('http://localhost:8080/api/sailboats/count');
-    return await response.json();
-}
-
-async function fetchRaceCount() {
-    const response = await fetch('http://localhost:8080/api/races/count');
-    return await response.json();
 }
 
 function createStatRow(label, value) {
@@ -85,32 +35,54 @@ function createStatRow(label, value) {
     return row;
 }
 
+
+// Populate
+async function populateRaceResultsList(raceResultsList) {
+    const raceDTOs = await fetchData('http://localhost:8080/api/races/races-dto');
+    raceDTOs.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+    raceDTOs.forEach(raceDTO => {
+        raceDTO.raceResults.sort((a, b) => a.points - b.points);
+
+        const raceDiv = document.createElement('div');
+        raceDiv.innerHTML = `<h3>Race Date: ${raceDTO.date}, Boat Type: ${raceDTO.boatType}</h3>`;
+
+        const participantsList = document.createElement('ul');
+        raceDTO.raceResults.forEach(result => {
+            const participant = createParticipantItem(result);
+            participantsList.appendChild(participant);
+        });
+
+        raceDiv.appendChild(participantsList);
+        raceResultsList.appendChild(raceDiv);
+    });
+}
+
+async function populateCumulativeResultsTable(cumulativeResultsTable) {
+    const sailboatDTOs = await fetchData('http://localhost:8080/api/races/sailboats-cumulative-results-dto');
+    sailboatDTOs.forEach(dto => {
+        cumulativeResultsTable.appendChild(createTableRow([dto.name, dto.boatType, dto.totalRaces, dto.totalPoints]));
+    });
+}
+
 async function populateSummaryStats() {
-    const sailboatCount = await fetchSailboatCount();
-    const raceCount = await fetchRaceCount();
+    const sailboatCount = await fetchData('http://localhost:8080/api/sailboats/count');
+    const raceCount = await fetchData('http://localhost:8080/api/races/count');
 
     const summaryStatsTableBody = document.querySelector('table[summaryStats] tbody');
 
-    // Append stats
     summaryStatsTableBody.appendChild(createStatRow('Total Sailboats', sailboatCount));
     summaryStatsTableBody.appendChild(createStatRow('Total Races', raceCount));
 }
 
-
-
-
-
-async function populateTables() {
-    const raceDTOs = await fetchRacesDTO();
-    const sailboatDTOs = await fetchSailboatCumulativeResultsDTO();
+// initialize
+async function initialize() {
     const raceResultsList = document.getElementById('raceResultsList');
     const cumulativeResultsTable = document.getElementById('cumulativeResultsTable').getElementsByTagName('tbody')[0];
 
-    await populateRaceResultsList(raceDTOs, raceResultsList);
-
-    populateCumulativeResultsTable(sailboatDTOs, cumulativeResultsTable);
+    await populateRaceResultsList(raceResultsList);
+    populateCumulativeResultsTable(cumulativeResultsTable);
+    populateSummaryStats();
 }
 
-populateSummaryStats();
-populateTables();
-
+initialize();
