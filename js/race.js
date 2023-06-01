@@ -129,7 +129,6 @@ function updateRaceResult(id) {
         .then(response => response.json())
         .then(data => {
             document.getElementById("sailboatId").value = data.sailboat.id;
-            document.getElementById("raceId").value = data.race.id;
             document.getElementById("points").value = data.points;
         });
 
@@ -154,7 +153,7 @@ document.getElementById("updateForm").addEventListener("submit", function (event
             id: document.getElementById("sailboatId").value,
         },
         race: {
-            id: document.getElementById("raceId").value,
+            id: Number(`${raceId}`),
         },
         points: document.getElementById("points").value,
     };
@@ -190,19 +189,4 @@ function deleteRaceResult(id) {
     });
 }
 
-function populateSailboatsSelect() {
-    const sailboatSelect = document.getElementById('sailboatSelect');
-
-    fetchSailboats().then(sailboats => {
-        sailboats.forEach(sailboat => {
-            const option = document.createElement('option');
-            option.value = sailboat.id;
-            option.textContent = sailboat.name;
-            sailboatSelect.appendChild(option);
-        });
-    });
-}
-
-
-populateSailboatsSelect();
 refreshList();
