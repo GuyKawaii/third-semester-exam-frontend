@@ -5,7 +5,27 @@ window.onload = function() {
 
 // Add event listener to Create form
 document.getElementById('create-form').addEventListener('submit', function(event) {
+    event.preventDefault();// Add event listener to Create form
+document.getElementById('create-form').addEventListener('submit', function(event) {
     event.preventDefault();
+
+    var formData = {
+        name: document.getElementById('create-name').value,
+        boatType: document.getElementById('create-boatType').value,
+    };
+
+    fetch('http://localhost:8080/api/sailboats', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
+    }).then(response => {
+        if (response.ok) {
+            refreshList();
+        }
+    });
+});
 
     var formData = {
         name: document.getElementById('create-name').value,
