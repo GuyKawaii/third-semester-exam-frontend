@@ -1,15 +1,10 @@
-async function fetchSailboats() {
-    const response = await fetch('http://localhost:8080/api/sailboats');
+async function fetchRacesDTO() {
+    const response = await fetch('http://localhost:8080/api/races/races-dto');
     return await response.json();
 }
 
-async function fetchRaces() {
-    const response = await fetch('http://localhost:8080/api/races');
-    return await response.json();
-}
-
-async function fetchRaceResults(raceId) {
-    const response = await fetch(`http://localhost:8080/api/race-results/race/${raceId}`);
+async function fetchSailboatCumulativeResultsDTO() {
+    const response = await fetch('http://localhost:8080/api/races/sailboats-cumulative-results-dto');
     return await response.json();
 }
 
@@ -23,47 +18,58 @@ function createTableRow(columns) {
     return row;
 }
 
-async function populateRaceResultsTable(races, raceResultsTable, sailboatResults) {
-    await Promise.all(races.map(async (race) => {
-        const raceResults = await fetchRaceResults(race.id);
-        raceResults.forEach(result => {
-            const row = createTableRow([race.date, result.sailboat.name, result.sailboat.boatType, result.points]);
-            raceResultsTable.appendChild(row);
-
-            if (!sailboatResults[result.sailboat.id]) {
-                sailboatResults[result.sailboat.id] = {
-                    name: result.sailboat.name,
-                    boatType: result.sailboat.boatType,
-                    races: 0,
-                    points: 0
-                };
-            }
-            sailboatResults[result.sailboat.id].races++;
-            sailboatResults[result.sailboat.id].points += result.points;
-        });
-    }));
+function sortByDate(a, b) {
+    return new Date(a.date) - new Date(b.date);
 }
 
-function populateCumulativeResultsTable(sailboats, sailboatResults, cumulativeResultsTable) {
-    sailboats.forEach(sailboat => {
-        if (sailboatResults[sailboat.id]) {
-            const row = createTableRow([sailboat.name, sailboat.boatType, sailboatResults[sailboat.id].races, sailboatResults[sailboat.id].points]);
-            cumulativeResultsTable.appendChild(row);
-        }
+function sortByPoints(a, b) {
+    return a.points - b.points;
+}
+
+function createParticipantItem(result) {
+    const participant = document.createElement('li');
+    participant.textContent = `${result.sailboat.name}: ${result.points} points`;
+    return participant;
+}
+
+async function populateRaceResultsList(raceDTOs, raceResultsList) {
+    raceDTOs.sort(sortByDate);
+
+    raceDTOs.forEach(raceDTO => {
+        // Sort raceResults by points
+        raceDTO.raceResults.sort(sortByPoints);
+
+        // Create a div for this race
+        const raceDiv = document.createElement('div');
+        raceDiv.innerHTML = `<h3>Race Date: ${raceDTO.date}, Boat Type: ${raceDTO.boatType}</h3>`;
+
+        // Create a ul for the participant list
+        const participantsList = document.createElement('ul');
+        raceDTO.raceResults.forEach(result => {
+            const participant = createParticipantItem(result);
+            participantsList.appendChild(participant);
+        });
+
+        raceDiv.appendChild(participantsList);
+        raceResultsList.appendChild(raceDiv);
+    });
+}
+
+function populateCumulativeResultsTable(sailboatDTOs, cumulativeResultsTable) {
+    sailboatDTOs.forEach(dto => {
+        cumulativeResultsTable.appendChild(createTableRow([dto.name, dto.boatType, dto.totalRaces, dto.totalPoints]));
     });
 }
 
 async function populateTables() {
-    const sailboats = await fetchSailboats();
-    const races = await fetchRaces();
-    const raceResultsTable = document.getElementById('raceResultsTable').getElementsByTagName('tbody')[0];
+    const raceDTOs = await fetchRacesDTO();
+    const sailboatDTOs = await fetchSailboatCumulativeResultsDTO();
+    const raceResultsList = document.getElementById('raceResultsList');
     const cumulativeResultsTable = document.getElementById('cumulativeResultsTable').getElementsByTagName('tbody')[0];
 
-    let sailboatResults = {};
+    await populateRaceResultsList(raceDTOs, raceResultsList);
 
-    await populateRaceResultsTable(races, raceResultsTable, sailboatResults);
-
-    populateCumulativeResultsTable(sailboats, sailboatResults, cumulativeResultsTable);
+    populateCumulativeResultsTable(sailboatDTOs, cumulativeResultsTable);
 }
 
 populateTables();
