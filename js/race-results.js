@@ -147,7 +147,7 @@ function populateSailboats(selectId, defaultSelection) {
             data.forEach(item => {
                 let option = document.createElement('option');
                 option.value = item.id;
-                option.textContent = item.name;
+                option.textContent = `${item.name} - ${item.boatType}`;
                 if(item.id == defaultSelection){
                     option.selected = true;
                 }
@@ -166,7 +166,7 @@ function populateRaces(selectId, defaultSelection) {
             data.forEach(item => {
                 let option = document.createElement('option');
                 option.value = item.id;
-                option.textContent = item.name;
+                option.textContent = `date:${item.date} - type:${item.boatType}`;
                 if(item.id === defaultSelection){
                     option.selected = true;
                 }
