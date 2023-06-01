@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Race Results</title>
+  <link rel="stylesheet" href="../css/main.css">
+  <script src="../js/race.js" defer></script>
+</head>
+<body class="center">
+<h1>Race Results</h1>
+
+<form id="create-form">
+  <select id="create-sailboat"> </select>
+  <input type="number" id="create-points" placeholder="points"> </input>
+  <button type="submit">Create</button>
+</form>
+
+
+<div id="raceResultForm">
+  <form onsubmit="addRaceResult(event)">
+    <select id="sailboatSelect" required>
+      <!-- Sailboat options will be populated by JavaScript -->
+    </select>
+    <input id="pointsInput" type="number" required>
+    <button type="submit">Add Race Result</button>
+  </form>
+</div>
+
+<ul id="raceResultsList">
+  <!-- Race results will be populated here by JavaScript -->
+</ul>
+
+<h1>race-results</h1>
+<table id="race-results-list">
+  <thead>
+  <tr>
+    <th>id</th>
+    <th>date</th>
+    <th>boatType</th>
+    <th>race id</th>
+    <th>race type</th>
+    <th>sailboat id</th>
+    <th>sailboat name</th>
+    <th>points</th>
+    <th>actions</th>
+  </tr>
+  </thead>
+  <tbody>
+  </tbody>
+</table>
+
+<div id="updateModal">
+  <form id="updateForm">
+    <span id="close">&times;</span>
+    <label for="sailboatId">sailboatId:</label><br>
+    <input type="number" id="sailboatId" name="sailboatId"><br>
+    <label for="raceId">raceId:</label><br>
+    <input type="number" id="raceId" name="raceId"><br>
+    <label for="points">points:</label><br>
+    <input type="number" id="points" name="points"><br>
+    <input type="hidden" id="updateId">
+    <input type="submit" value="Update">
+  </form>
+</div>
+
+</body>
+</html>
