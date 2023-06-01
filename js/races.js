@@ -135,30 +135,6 @@ function deleteRaceResult(id) {
     });
 }
 
-// // Populate Race Select
-// function populateRaces(selectId, defaultSelection) {
-//     fetch('http://localhost:8080/api/races')
-//         .then(response => response.json())
-//         .then(data => {
-//             let select = document.getElementById(selectId);
-//             data.forEach(item => {
-//                 let option = document.createElement('option');
-//                 option.value = item.id;
-//                 option.textContent = `${item.date} - ${item.boatType}`;
-//                 if(item.id === defaultSelection){
-//                     option.selected = true;
-//                 }
-//                 select.appendChild(option);
-//             });
-//         })
-//         .catch(error => console.error('Error:', error));
-// }
-
-// todo add update select options to html instead of input fieldss
 window.onload = function() {
     refreshList();
-    // populateSailboats('create-sailboat', 2);
-    // populateSailboats('update-sailboat', 2);
-    // populateRaces('create-race', 2);
-    // populateRaces('update-race', 2);
 }

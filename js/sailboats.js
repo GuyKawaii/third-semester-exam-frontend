@@ -87,7 +87,7 @@ function refreshList() {
 // Update a Sailboat
 function updateBoat(id) {
     var updateModal = document.getElementById("updateModal");
-    document.getElementById("updateId").value = id; // TODO checkout later location HTML and so on
+    document.getElementById("updateId").value = id;
 
     console.log("to update: " + id);
 
