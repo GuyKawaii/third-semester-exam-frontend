@@ -29,19 +29,6 @@ async function addRaceResult(event) {
     }
 }
 
-// function populateRaceResultsList() {
-//     const raceResultsList = document.getElementById('raceResultsList');
-//     raceResultsList.innerHTML = '';
-//
-//     fetchRaceResults(raceId).then(results => {
-//         results.forEach(result => {
-//             const li = document.createElement('li');
-//             li.textContent = `Sailboat: ${result.sailboat.name}, Points: ${result.points}`;
-//             raceResultsList.appendChild(li);
-//         });
-//     });
-// }
-
 // Add event listener to Create form
 document.getElementById('create-form').addEventListener('submit', function (event) {
     event.preventDefault();
@@ -91,8 +78,6 @@ function populateSailboats(selectId, defaultSelection) {
 
 populateSailboats('create-sailboat', 2);
 // populateSailboats('update-sailboat', 2);
-// populateRaces('create-race', 2);
-// populateRaces('update-race', 2);
 
 function refreshList() {
     fetch(`http://localhost:8080/api/race-results/race/${raceId}`)
@@ -107,7 +92,7 @@ function refreshList() {
 
             data.forEach(item => {
                 let row = document.createElement('tr');
-                ['id', 'race.date', 'race.boatType', 'race.id', 'race.boatType', 'sailboat.id', 'sailboat.name', 'points'].forEach(field => {
+                ['sailboat.id', 'sailboat.name', 'points'].forEach(field => {
                     let cell = document.createElement('td');
                     let [object, property] = field.split('.');
                     cell.textContent = object && property ? item[object][property] : item[field];

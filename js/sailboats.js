@@ -138,7 +138,6 @@ document.getElementById("updateForm").addEventListener("submit", function(event)
     });
 });
 
-
 // Delete a Sailboat
 function deleteBoat(id) {
     fetch(`http://localhost:8080/api/sailboats/${id}`, {
@@ -146,6 +145,12 @@ function deleteBoat(id) {
     }).then(response => {
         if (response.ok) {
             refreshList();
+        } else {
+            throw new Error('Cant delete sailboat as it has been in a race.');
         }
+    }).catch(error => {
+        // Display error message in a popup
+        alert(error.message);
     });
 }
+
