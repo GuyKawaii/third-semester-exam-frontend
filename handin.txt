@@ -5,7 +5,7 @@ Github link:
 https://github.com/GuyKawaii/third-semester-exam-backend
 https://github.com/GuyKawaii/third-semester-exam-frontend
 
-beskrivelse:
+Beskrivelse:
 jeg nåede at lave alle opgaver når det kommer til funktionalitet.
 
 Opgave 1:
