@@ -4,6 +4,7 @@ const raceId = urlParams.get('raceId');
 async function fetchData(url, method='GET', body=null) {
     const options = body ? {method, headers: {'Content-Type': 'application/json'}, body: JSON.stringify(body)} : {method};
     const response = await fetch(url, options);
+    if (response.status === 204) return; // No content
     return response.ok ? response.json() : null;
 }
 
@@ -98,9 +99,22 @@ document.getElementById("updateForm").addEventListener("submit", async function 
     document.getElementById("updateModal").style.display = "none";
 });
 
+// async function deleteRaceResult(id) {
+//     await fetchData(`http://localhost:8080/api/race-results/${id}`, 'DELETE');
+//     await refreshList();
+// }
+// todo fix delete check error code
+
 async function deleteRaceResult(id) {
-    await fetchData(`http://localhost:8080/api/race-results/${id}`, 'DELETE');
-    refreshList();
+    try {
+        const response = await fetchData(`http://localhost:8080/api/race-results/${id}`, 'DELETE');
+        if(response === undefined) { // The DELETE request was successful ie. error code 204
+            await refreshList();
+        }
+    } catch (error) {
+        console.error('An error occurred:', error);
+    }
 }
+
 
 refreshList();
