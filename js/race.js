@@ -99,12 +99,6 @@ document.getElementById("updateForm").addEventListener("submit", async function 
     document.getElementById("updateModal").style.display = "none";
 });
 
-// async function deleteRaceResult(id) {
-//     await fetchData(`http://localhost:8080/api/race-results/${id}`, 'DELETE');
-//     await refreshList();
-// }
-// todo fix delete check error code
-
 async function deleteRaceResult(id) {
     try {
         const response = await fetchData(`http://localhost:8080/api/race-results/${id}`, 'DELETE');
