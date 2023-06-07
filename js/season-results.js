@@ -1,3 +1,5 @@
+// const BASE_URL = "http://localhost:8080/api";
+
 // fetch data
 async function fetchData(url) {
     const response = await fetch(url);
