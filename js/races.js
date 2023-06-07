@@ -1,10 +1,5 @@
 // const BASE_URL = "http://localhost:8080/api";
 
-import { greet } from "./utils.js";
-
-console.log(greet("lala")); // Hello, Scaler
-
-
 // Add event listener to Create form
 document.getElementById('create-form').addEventListener('submit', function (event) {
     event.preventDefault();
